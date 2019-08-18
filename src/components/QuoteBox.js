@@ -29,15 +29,15 @@ class QuoteBox extends React.Component {
     }
     render() {
         return (
-            <div id={'quote-box'} className={'card card-light'}>
-                <div id={'text'} dangerouslySetInnerHTML={{ __html: this.props.quote }} />
-                <div id={'author'}>{this.props.author}</div>
-                <div id={'buttons'} className={'btn-toolbar'}>
-                    <a className="button" id="tweet-quote" title="Tweet this quote!" target="_blank" href="twitter.com/intent/tweet">
-                        <i className="fa fa-twitter"></i>
+            <div id={'quote-box'} className={'card card-light w-75'}>
+                <div id={'buttons'}>
+                    <a className="btn btn-secondary" id="tweet-quote" title="Tweet this quote!" target="_blank" href="https://twitter.com/intent/tweet" rel="noopener noreferrer ">
+                        <i className="fa fa-twitter" />
                     </a>
-                    <button id={'new-quote'} onClick={this.getQuote}>New quote</button>
+                    <button id={'new-quote'} className={'btn btn-secondary'} onClick={this.getQuote}>New quote</button>
                 </div>
+                <div id={'text'} dangerouslySetInnerHTML={{ __html: this.props.quote }} />
+                <div id={'author'} className={'card-text text-right font-italic'}>{this.props.author}</div>
             </div>
         );
     }
