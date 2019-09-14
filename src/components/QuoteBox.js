@@ -1,4 +1,5 @@
 import React from 'react';
+import request from 'request';
 
 class QuoteBox extends React.Component {
     constructor(props) {
@@ -10,22 +11,14 @@ class QuoteBox extends React.Component {
         this.getQuote();
     }
     getQuote() {
-        let url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=' + Math.floor((Math.random() * 20) + 1);
-        const callback = this.parseQuote;
-
-        let request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-            if (request.readyState === 4 && request.status === 200) {
-                callback(request.response); // Another callback here
-            }
-        };
-        request.open('GET', url);
-        request.withCredentials = true;
-        request.send();
+        request('https://quotesondesign.com/wp-json/wp/v2/posts?orderby=rand&' + Math.floor((Math.random() * 20) + 1), (err, res, body) => {
+            if (err) { return console.log(err); }
+            this.parseQuote(body);
+        });
     };
     parseQuote(data) {
         let post = JSON.parse(data)[0];
-        this.props.loadNewQuote(post.content, post.title);
+        this.props.loadNewQuote(post.content.rendered, post.title.rendered);
     }
     render() {
         return (
@@ -37,7 +30,7 @@ class QuoteBox extends React.Component {
                     <button id={'new-quote'} className={'btn btn-secondary'} onClick={this.getQuote}>New quote</button>
                 </div>
                 <div id={'text'} dangerouslySetInnerHTML={{ __html: this.props.quote }} />
-                <div id={'author'} className={'card-text text-right font-italic'}>{this.props.author}</div>
+                <div id={'author'} className={'card-text text-right font-italic'} dangerouslySetInnerHTML={{ __html: this.props.author }} />
             </div>
         );
     }
